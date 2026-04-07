@@ -1,0 +1,25 @@
+name: Github Action with cron
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # 每天 UTC 0点
+
+jobs:
+  main-job:
+    name: Main Job
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # 你的实际步骤...
+
+  keepalive:
+    name: Keepalive
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: liskin/gh-workflow-keepalive@v1
+        # 可选：指定要保活的 workflow 文件名（如果有多个 workflow）
+        with:
+           workflow_file_name: auto.yml
