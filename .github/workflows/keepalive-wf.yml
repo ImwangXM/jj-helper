@@ -3,7 +3,7 @@ name: Cron with Auto Keepalive
 on:
   schedule:
     - cron: "0 0 * * *"
-  workflow_dispatch:
+  workflow_dispatch:        # 手动触发按钮
 
 jobs:
   main-job:
@@ -11,16 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name != 'schedule' || !github.event.repository.fork }}
     steps:
-      - uses: actions/checkout@v6     # ← 这里改成 v6
-      # 你的实际步骤...
+      - uses: actions/checkout@v6
+      # 你的实际步骤在这里...
 
   keepalive:
     name: Auto Keepalive
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write     # 必须有这个权限才能 push commit
       actions: write
-    if: ${{ github.event_name == 'schedule' }}
+    # ← 这里临时去掉 if 条件，让手动触发也能创建 commit 测试
     steps:
-      - uses: actions/checkout@v6     # ← 这里也改成 v6
+      - uses: actions/checkout@v6
       - uses: efrecon/gh-action-keepalive@v2
