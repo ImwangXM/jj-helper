@@ -2,28 +2,25 @@ name: Cron with Auto Keepalive
 
 on:
   schedule:
-    - cron: "0 0 * * *"     # 每天 UTC 0点（可改成更频繁测试）
-  workflow_dispatch:        # 保留手动触发按钮，方便你第一次测试
+    - cron: "0 0 * * *"
+  workflow_dispatch:
 
 jobs:
   main-job:
     name: Main Job
     runs-on: ubuntu-latest
-    # fork 上只允许手动运行，schedule 自动跳过（避免反复被 GitHub 禁用提示）
     if: ${{ github.event_name != 'schedule' || !github.event.repository.fork }}
     steps:
-      - uses: actions/checkout@v4
-      # ← 这里放你原来的所有步骤
+      - uses: actions/checkout@v6     # ← 这里改成 v6
+      # 你的实际步骤...
 
   keepalive:
     name: Auto Keepalive
     runs-on: ubuntu-latest
-    # 必须给 contents: write 权限，才能自动 commit
     permissions:
       contents: write
       actions: write
-    # 只在 schedule 触发时跑 keepalive（手动测试时跳过）
     if: ${{ github.event_name == 'schedule' }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: efrecon/gh-action-keepalive@v2   # 目前推荐 v2
+      - uses: actions/checkout@v6     # ← 这里也改成 v6
+      - uses: efrecon/gh-action-keepalive@v2
