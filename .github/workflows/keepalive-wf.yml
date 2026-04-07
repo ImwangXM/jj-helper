@@ -1,4 +1,4 @@
-name: Cron with Auto Keepalive
+name: Auto Keepalive
 
 on:
   schedule:
@@ -9,11 +9,10 @@ jobs:
   main-job:
     name: Main Job
     runs-on: ubuntu-latest
-    # fork 上先只允许手动运行（避免反复禁用）
     if: ${{ github.event_name != 'schedule' || !github.event.repository.fork }}
     steps:
-      - uses: actions/checkout@v6          # ← 已升级，解决 Node.js 20 警告
-      # 这里放你原来的所有步骤（step1、step2...）
+      - uses: actions/checkout@v6          # ← 必须是 v6
+      # 你的实际步骤写在这里...
 
   keepalive:
     name: Auto Keepalive
@@ -22,5 +21,5 @@ jobs:
       contents: write
       actions: write
     steps:
-      - uses: actions/checkout@v6          # ← 必须升级
-      - uses: efrecon/gh-action-keepalive@main   # ← 正确版本（已确认 2026 年 3 月还在维护）
+      - uses: actions/checkout@v6          # ← 必须是 v6
+      - uses: efrecon/gh-action-keepalive@main   # ← 已确认 2026 年 3 月还在维护
